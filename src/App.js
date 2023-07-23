@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import { marked } from 'marked';
 
 import './App.css';
@@ -48,20 +48,14 @@ function App() {
   1. And last but not least, let's not forget embedded images:
   
   ![freeCodeCamp Logo](https://cdn.freecodecamp.org/testable-projects-fcc/images/fcc_secondary.svg)
-  `;
-  const [text, setText] = useState(placeholder);
-  const [preview, setPreview] = useState('');
-  const contenedorPreview = useRef(null);
-
-
-  useEffect(() => {
-    setPreview(marked(text));
-  }, [text]);
+  `; 
   
-  useEffect(() => {
-    contenedorPreview.current.innerHTML = preview;
-  }, [preview]);
+  const [text, setText] = useState(placeholder);
 
+  marked.setOptions({
+    breaks: true
+  })
+  // breaks: if true, \n in markdown will be rendered as <br>
 
   return (
     <div className="App">
@@ -69,14 +63,14 @@ function App() {
         <div className='editor-header'>
           <h2>Editor</h2>
         </div>
-        <textarea id='editor' value={text} onChange={e => setText(e.target.value)}>
+        <textarea id='editor' value={text} onChange={e => setText(e.target.value)} >
         </textarea>
       </div>
       <div className='preview-container'>
         <div className='preview-header'>
           <h2>Preview</h2>          
         </div>
-        <div id='preview' ref={contenedorPreview}>
+        <div id='preview' dangerouslySetInnerHTML={{__html: marked(text)}}>
         </div>
       </div>
     </div>
